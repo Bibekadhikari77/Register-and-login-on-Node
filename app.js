@@ -6,19 +6,21 @@ const bcrypt = require('bcrypt');
 const User = require('./models/User');
 
 const app = express();
+require('dotenv').config();
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://adhikaribibek84:aHAqnN3rMGJXn3zS@cluster0.cjr7qt8.mongodb.net/auth-app?retryWrites=true&w=majority')
-  .then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+
 app.use(session({
-  secret: 'mysecretkey',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }));
